@@ -4,11 +4,12 @@
   const $ = selector => document.querySelector(selector);
   const categoryNames = { entrance: '기본 등장', scroll: '스크롤 연동', pin: '화면 고정' };
   const levelNames = { beginner: '입문', intermediate: '중급', advanced: '고급' };
-  const stageNames = { basic: '기본 효과', advanced: '심화 활용' };
+  const stageNames = { basic: '기본 효과', advanced: '심화 활용', practice: '실무 응용' };
   const stageDescriptions = {
     all: '작은 움직임을 익히고, 하나의 웹사이트 경험으로 연결해 보세요.',
     basic: '한 가지 효과의 시작·진행·끝을 관찰해 보세요. 심화 활용을 만드는 재료가 됩니다.',
-    advanced: '여러 효과의 타이밍을 연결한 장면입니다. 예제 안에서 진행 순서와 조합한 기본 효과를 확인하세요.'
+    advanced: '여러 효과의 타이밍을 연결한 장면입니다. 예제 안에서 진행 순서와 조합한 기본 효과를 확인하세요.',
+    practice: '스크롤의 속도·방향·경로와 정보 구조에 반응하는 예제입니다. 천천히·빠르게, 위아래로 움직이며 비교하세요.'
   };
   const knownIds = new Set(demos.map(demo => demo.id));
   let saved = new Set();
@@ -32,7 +33,20 @@
   document.querySelectorAll('[data-count]').forEach(el => {
     el.textContent = demos.filter(demo => el.dataset.count === 'all' || demo.stage === el.dataset.count).length;
   });
-  $('#stage-context > span:last-child').textContent = `기본 ${demos.filter(d=>d.stage==='basic').length} + 심화 ${demos.filter(d=>d.stage==='advanced').length}`;
+  $('#stage-context > span:last-child').textContent = `기본 ${demos.filter(d=>d.stage==='basic').length} + 심화 ${demos.filter(d=>d.stage==='advanced').length} + 실무 ${demos.filter(d=>d.stage==='practice').length}`;
+  const libraryGuide = document.createElement('div');
+  libraryGuide.className = 'extra-library-guide';
+  const libraryIntro = document.createElement('p');
+  libraryIntro.textContent = '아래 예제를 직접 복사할 때는 필요한 추가 라이브러리를 기본 두 항목 뒤에 넣으세요. CodePen에서 열기를 사용하면 자동 설정됩니다.';
+  libraryGuide.append(libraryIntro);
+  demos.filter(demo => demo.extraLibraries?.length).forEach(demo => {
+    const label = document.createElement('p');
+    label.textContent = `${demo.number} / ${demo.title}`;
+    const code = document.createElement('code');
+    code.textContent = demo.extraLibraries.join('\n');
+    libraryGuide.append(label, code);
+  });
+  $('.manual-guide > div').append(libraryGuide);
 
   function toast(message) {
     const el = $('#toast');
@@ -71,10 +85,10 @@
   function renderCards() {
     const visible = getVisibleDemos();
     $('#card-grid').innerHTML = visible.map(demo => `
-      <article class="motion-card ${demo.stage === 'advanced' ? 'advanced-card' : ''}" data-id="${demo.id}">
+      <article class="motion-card ${demo.stage === 'basic' ? '' : 'advanced-card'} ${demo.stage === 'practice' ? 'practice-card' : ''}" data-id="${demo.id}">
         <button class="card-preview" data-open="${demo.id}" aria-label="${demo.title} 미리보기 열기" style="--scene-bg:${demo.bg};--scene-ink:${demo.ink}">
           <span class="preview-grid"></span><span class="preview-topline"><span>EXPERIMENT ${demo.number}</span><span>↗</span></span>
-          ${demo.thumbnail}${demo.stage === 'advanced' ? '<span class="advanced-preview-badge">✳ CREATIVE COMBINATION</span>' : ''}<span class="preview-caption">${demo.en.toUpperCase()} / SCROLL EXPLORATION</span><span class="play-badge" aria-hidden="true">↗</span>
+          ${demo.thumbnail}${demo.stage !== 'basic' ? `<span class="advanced-preview-badge">✳ ${demo.stage === 'practice' ? 'REAL-WORLD MOTION' : 'CREATIVE COMBINATION'}</span>` : ''}<span class="preview-caption">${demo.en.toUpperCase()} / SCROLL EXPLORATION</span><span class="play-badge" aria-hidden="true">↗</span>
         </button>
         <div class="card-body"><div class="card-meta"><span class="card-number">${demo.number}</span><span>${demo.en}</span><button class="save-card ${saved.has(demo.id) ? 'saved' : ''}" data-save="${demo.id}" aria-label="${demo.title} 저장" aria-pressed="${saved.has(demo.id)}">${saved.has(demo.id) ? '♥' : '♡'}</button></div>
           <h3 class="card-title"><button data-open="${demo.id}">${demo.title}</button></h3><p class="card-description">${demo.short}</p>
@@ -86,7 +100,7 @@
     $('#saved-count').textContent = saved.size;
     $('#stage-description').textContent = stageDescriptions[stage];
     $('#stage-context').dataset.stage = stage;
-    $('#result-hint').textContent = stage === 'advanced' ? '각 예제에서 장면 흐름과 조합한 기본 효과를 확인하세요' : '기본과 심화를 함께 탐색하고 비교해 보세요';
+    $('#result-hint').textContent = stage === 'practice' ? '위치뿐 아니라 속도와 방향에 따른 차이도 관찰해 보세요' : stage === 'advanced' ? '각 예제에서 장면 흐름과 조합한 기본 효과를 확인하세요' : '기본·심화·실무 응용을 함께 비교해 보세요';
     if (dialog.open) updateNavigation();
   }
 
@@ -161,8 +175,9 @@
     $('#dialog-option').textContent = demo.option;
     $('#dialog-experiment').textContent = demo.experiment;
     $('#dialog-tags').innerHTML = `<span class="stage-tag ${demo.stage}">${stageNames[demo.stage]}</span><span class="type-tag ${demo.category}">${categoryNames[demo.category]}</span><span class="type-tag">난이도 ${levelNames[demo.level]}</span>`;
-    learningPanel.hidden = demo.stage !== 'advanced';
-    learningPanel.innerHTML = demo.stage === 'advanced' ? `<details open><summary>이 장면은 어떻게 이어지나요? <span>−</span></summary><ol class="scene-flow">${demo.flow.map((text,index)=>`<li><b>${String(index + 1).padStart(2,'0')}</b><span>${escapeText(text)}</span></li>`).join('')}</ol><div class="skills-label">조합한 기본 효과</div><div class="skill-chips">${demo.skills.map(text=>`<span>${escapeText(text)}</span>`).join('')}</div>${demo.assetNote ? `<p class="asset-note">${escapeText(demo.assetNote)}</p>` : ''}<p class="library-note">${demo.extraLibraries ? '추가 라이브러리: GSAP Flip · CodePen에 자동 설정됩니다.' : 'HTML · CSS · JS + GSAP / 별도 프레임워크 없이 실행'}</p></details>` : '';
+    learningPanel.hidden = demo.stage === 'basic';
+    const extraNames = (demo.extraLibraries || []).map(url => url.split('/').pop().replace('.min.js','')).join(' + ');
+    learningPanel.innerHTML = demo.stage !== 'basic' ? `<details open><summary>이 장면은 어떻게 이어지나요? <span>−</span></summary><ol class="scene-flow">${demo.flow.map((text,index)=>`<li><b>${String(index + 1).padStart(2,'0')}</b><span>${escapeText(text)}</span></li>`).join('')}</ol><div class="skills-label">조합한 효과·기술</div><div class="skill-chips">${demo.skills.map(text=>`<span>${escapeText(text)}</span>`).join('')}</div>${demo.assetNote ? `<p class="asset-note">${escapeText(demo.assetNote)}</p>` : ''}<p class="library-note">${extraNames ? `추가 라이브러리: ${escapeText(extraNames)} · CodePen에 자동 설정됩니다.` : 'HTML · CSS · JS + GSAP / 별도 프레임워크 없이 실행'}</p></details>` : '';
     updateNavigation();
     updateSaveButton();
     renderCode(activeTab);

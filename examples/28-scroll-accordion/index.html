@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>스크롤 아코디언 — Scroll Lab</title><style>/* 공통 레이아웃: 위아래 여백은 스크롤할 공간을 만듭니다. */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f6f5ef; color: #363d31;
+  font-family: Arial, "Noto Sans KR", sans-serif; }
+html { overflow-x: hidden; }
+.demo-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 22px 6%;
+  display: flex; justify-content: space-between; font-size: 10px; z-index: 2; }
+.demo-nav b { font-size: 15px; letter-spacing: -0.8px; }
+.intro, .outro { min-height: 82vh; padding: 90px 8% 50px; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.eyebrow { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+.intro h1 { font-size: clamp(32px, 6vw, 60px); line-height: 1.2;
+  font-weight: 400; letter-spacing: -2px; margin: 20px 0; }
+.intro p, .outro p { font-size: 12px; color: #89917f; line-height: 1.9; }
+.scroll-hint { margin-top: 35px; font-size: 11px; }
+.scroll-hint span { display: block; font-size: 24px; margin-top: 10px; }
+.scene { min-height: 88vh; padding: 70px 8%; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.scene-label { position: absolute; top: 24px; left: 6%; font-size: 9px;
+  letter-spacing: 1.5px; opacity: .55; }
+.outro { min-height: 110vh; } /* 마지막 효과도 끝까지 진행할 스크롤 여백 */
+.outro h2 { font-size: 34px; font-weight: 400; letter-spacing: -1px; }
+.poster { width: min(100%, 360px); min-height: 330px; padding: 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: #d8e0ce; border-radius: 3px; }
+.poster small { font-size: 9px; letter-spacing: 1.5px; }
+.poster h2 { font-size: clamp(38px, 7vw, 62px); font-weight: 400;
+  line-height: 1; letter-spacing: -2px; margin: 30px 0; }
+.poster-foot { display: flex; justify-content: space-between; font-size: 9px; }
+.orb { width: 100px; height: 100px; background: #9aa988; border-radius: 50%; }
+@media (max-width: 480px) {
+  .scene { padding: 65px 7%; }
+  .intro h1 { font-size: 38px; }
+  .poster { min-height: 300px; padding: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* 이 예제의 스타일 */
+
+/* 실무 응용 공통: 움직임이 없어도 콘텐츠를 읽을 수 있는 기본 상태 */
+.practice-scene { min-height: 380px; height: 100vh; padding: 65px 7%; overflow: hidden; }
+.practice-scene h2 { font-size: clamp(30px,5.5vw,56px); line-height: 1.12; font-weight: 400; letter-spacing: -1.8px; margin: 15px 0; }
+.practice-kicker { font-size: 8px; letter-spacing: 2px; }
+.practice-scene p { font-size: 12px; line-height: 1.9; }
+.practice-heading { width: 100%; position: relative; z-index: 2; }
+.practice-status { font-size: 9px!important; letter-spacing: 1px; color: #7f8c79; }
+.practice-scene .scene-label { z-index: 5; pointer-events: none; }
+@media(max-width:480px) { .practice-scene { padding: 55px 6%; } .practice-scene h2 { font-size: 30px; letter-spacing: -1px; } }
+@media(prefers-reduced-motion:reduce) { .practice-scene { height: auto; min-height: 80vh; overflow: visible; } }
+.accordion-scene { flex-direction: row; gap: 7%; background: #e4e9dc; }
+.feature-copy { width: 48%; }.feature-copy h2 { font-size: clamp(25px,4vw,43px); margin-bottom: 25px; }
+.feature-step { border-top: 1px solid #bbc7ac; padding-block: 10px; }.feature-step h3 { font-size: 12px; font-weight: 400; margin: 0; }.feature-body { overflow: hidden; }.feature-body p { font-size: 11px; color: #829373; margin: 10px 0 0; }
+.feature-visuals { width: 45%; height: 310px; position: relative; }
+.feature-visual { position: absolute; inset: 0; border-radius: 5px; background: #bdcba9; display: grid; place-items: center; padding: 25px; }
+.feature-visual:nth-child(2) { background: #cbbba6; }.feature-visual:nth-child(3) { background: #a8bfc2; }
+.feature-visual>div { width: min(65%,150px); max-height: 180px; aspect-ratio: 1/1.3; border-radius: 50% 50% 3% 3%; background: #f9f5e777; }.feature-visual:nth-child(2)>div { border-radius: 50%; }.feature-visual:nth-child(3)>div { border-radius: 4px; transform: rotate(15deg); }
+.feature-visual>span { font-size: 8px; letter-spacing: 2px; }
+@media(max-width:480px) { .accordion-scene { gap: 5%; }.feature-copy h2 { font-size: 24px; }.feature-visuals { height: 240px; }.feature-step h3 { font-size: 10px; }.feature-body p { font-size: 10px; } }
+@media(prefers-reduced-motion:reduce) { .accordion-scene { flex-direction: column; gap: 30px; }.feature-copy,.feature-visuals { width: 100%; }.feature-visuals { height: auto; }.feature-visual { position: relative; height: 220px; margin-bottom: 15px; } }</style></head>
+<body><header class="demo-nav"><b>scrolllab.</b><span>28 / LIVE EXPERIMENT</span></header>
+<section class="intro">
+  <span class="eyebrow">SCROLL EXPERIMENT 28</span>
+  <h1>One thing<br>at a time.</h1>
+  <p>아래로 스크롤하며 움직임을 확인하세요.<br>위로 돌아오면 효과를 다시 볼 수 있어요.</p>
+  <div class="scroll-hint">SCROLL TO DISCOVER<span>↓</span></div>
+</section>
+<section class="scene practice-scene accordion-scene">
+  <span class="scene-label">28 — THE MOTION IN ACTION</span>
+<div class="feature-copy"><span class="practice-kicker">THREE WAYS TO CREATE</span><h2>Considered<br>at every step.</h2><article class="feature-step"><h3>01 / Discover</h3><div class="feature-body"><p>작은 질문에서 시작해 사용자의 일상을 관찰합니다.</p></div></article><article class="feature-step"><h3>02 / Connect</h3><div class="feature-body"><p>발견한 생각을 연결하고 새로운 가능성을 구체화합니다.</p></div></article><article class="feature-step"><h3>03 / Create</h3><div class="feature-body"><p>아이디어를 실제로 경험할 수 있는 형태로 완성합니다.</p></div></article></div><div class="feature-visuals"><div class="feature-visual"><div></div><span>FORM</span></div><div class="feature-visual"><div></div><span>COLOUR</span></div><div class="feature-visual"><div></div><span>SPACE</span></div></div>
+</section>
+<section class="outro"><span class="eyebrow">NOW IT'S YOUR TURN</span><h2>Make it your own.</h2>
+  <p>색상, 문구, 옵션 값을 바꿔보세요.<br>위로 스크롤하면 처음으로 돌아갑니다.</p><span>↑</span></section>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+  
+  gsap.registerPlugin(ScrollTrigger);
+
+// 운영체제에서 '동작 줄이기'를 설정했다면 정적인 콘텐츠를 보여줍니다.
+const mm = gsap.matchMedia();
+mm.add("(prefers-reduced-motion: no-preference)", () => {
+  const bodies = gsap.utils.toArray(".feature-body");
+  const visuals = gsap.utils.toArray(".feature-visual");
+  gsap.set(bodies.slice(1), { height: 0, autoAlpha: 0 });
+  gsap.set(visuals.slice(1), { autoAlpha: 0, scale: 0.9 });
+  const tl = gsap.timeline({ scrollTrigger: {
+    trigger: ".accordion-scene", start: "top top", end: "+=220%", pin: true, scrub: 1
+  }});
+  bodies.slice(1).forEach((body,index) => {
+    const at = index * 1.3 + 0.4;
+    tl.to(bodies[index], { height: 0, autoAlpha: 0, duration: 0.6 }, at)
+      .to(body, { height: "auto", autoAlpha: 1, duration: 0.6 }, at)
+      .to(visuals[index], { autoAlpha: 0, scale: 1.08, duration: 0.6 }, at)
+      .to(visuals[index+1], { autoAlpha: 1, scale: 1, duration: 0.6 }, at);
+  });
+  tl.to({}, { duration: 0.5 });
+});
+  // 웹폰트 등 레이아웃이 안정된 뒤 시작·끝 지점을 다시 측정합니다.
+  document.fonts.ready.then(() => ScrollTrigger.refresh());
+  
+} else {
+  
+  const notice = document.createElement("p");
+  notice.textContent = "GSAP을 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요.";
+  notice.style.cssText = "position:fixed;bottom:0;left:0;right:0;padding:16px;background:#fff1c8;text-align:center;font:12px sans-serif;z-index:99";
+  document.body.append(notice);
+}
+</script></body></html>

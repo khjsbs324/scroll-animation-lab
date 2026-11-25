@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>비포·애프터 비교 — Scroll Lab</title><style>/* 공통 레이아웃: 위아래 여백은 스크롤할 공간을 만듭니다. */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f6f5ef; color: #363d31;
+  font-family: Arial, "Noto Sans KR", sans-serif; }
+html { overflow-x: hidden; }
+.demo-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 22px 6%;
+  display: flex; justify-content: space-between; font-size: 10px; z-index: 2; }
+.demo-nav b { font-size: 15px; letter-spacing: -0.8px; }
+.intro, .outro { min-height: 82vh; padding: 90px 8% 50px; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.eyebrow { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+.intro h1 { font-size: clamp(32px, 6vw, 60px); line-height: 1.2;
+  font-weight: 400; letter-spacing: -2px; margin: 20px 0; }
+.intro p, .outro p { font-size: 12px; color: #89917f; line-height: 1.9; }
+.scroll-hint { margin-top: 35px; font-size: 11px; }
+.scroll-hint span { display: block; font-size: 24px; margin-top: 10px; }
+.scene { min-height: 88vh; padding: 70px 8%; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.scene-label { position: absolute; top: 24px; left: 6%; font-size: 9px;
+  letter-spacing: 1.5px; opacity: .55; }
+.outro { min-height: 110vh; } /* 마지막 효과도 끝까지 진행할 스크롤 여백 */
+.outro h2 { font-size: 34px; font-weight: 400; letter-spacing: -1px; }
+.poster { width: min(100%, 360px); min-height: 330px; padding: 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: #d8e0ce; border-radius: 3px; }
+.poster small { font-size: 9px; letter-spacing: 1.5px; }
+.poster h2 { font-size: clamp(38px, 7vw, 62px); font-weight: 400;
+  line-height: 1; letter-spacing: -2px; margin: 30px 0; }
+.poster-foot { display: flex; justify-content: space-between; font-size: 9px; }
+.orb { width: 100px; height: 100px; background: #9aa988; border-radius: 50%; }
+@media (max-width: 480px) {
+  .scene { padding: 65px 7%; }
+  .intro h1 { font-size: 38px; }
+  .poster { min-height: 300px; padding: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* 이 예제의 스타일 */
+
+/* 실무 응용 공통: 움직임이 없어도 콘텐츠를 읽을 수 있는 기본 상태 */
+.practice-scene { min-height: 380px; height: 100vh; padding: 65px 7%; overflow: hidden; }
+.practice-scene h2 { font-size: clamp(30px,5.5vw,56px); line-height: 1.12; font-weight: 400; letter-spacing: -1.8px; margin: 15px 0; }
+.practice-kicker { font-size: 8px; letter-spacing: 2px; }
+.practice-scene p { font-size: 12px; line-height: 1.9; }
+.practice-heading { width: 100%; position: relative; z-index: 2; }
+.practice-status { font-size: 9px!important; letter-spacing: 1px; color: #7f8c79; }
+.practice-scene .scene-label { z-index: 5; pointer-events: none; }
+@media(max-width:480px) { .practice-scene { padding: 55px 6%; } .practice-scene h2 { font-size: 30px; letter-spacing: -1px; } }
+@media(prefers-reduced-motion:reduce) { .practice-scene { height: auto; min-height: 80vh; overflow: visible; } }
+.compare-scene { background: #e8e8df; }
+.comparison-view { position: relative; width: min(100%,640px); aspect-ratio: 4/3; max-height: 58vh; overflow: hidden; margin-top: 20px; border-radius: 4px; }
+.room { position: absolute; inset: 0; background: linear-gradient(#d4d6cf 78%,#afb3a7 78%); }
+.room-window { position: absolute; width: 26%; height: 48%; border-radius: 60px 60px 0 0; background: #e8e9e2; left: 12%; top: 17%; border: 5px solid #b3b8aa; }
+.room-desk { position: absolute; left: 22%; right: 16%; height: 8%; top: 67%; background: #8f9788; box-shadow: 0 12px 0 #7f8779; }
+.room-vase { position: absolute; width: 10%; height: 25%; border-radius: 40% 40% 15% 15%; background: #acb4a1; left: 59%; top: 42%; }
+.room-art { position: absolute; width: 22%; height: 31%; right: 12%; top: 20%; border: 7px solid #aeb3a5; background: #c0c6b6; }
+.after { background: linear-gradient(#e8d8c5 78%,#b49b7e 78%); }.after .room-window { background: #f5e6bf; border-color: #b48e69; }.after .room-desk { background: #9b7251; box-shadow: 0 12px 0 #7b5c43; }.after .room-vase { background: #718f6a; }.after .room-art { border-color: #ae8562; background: #b2c1a1; }
+.compare-label { position: absolute; top: 15px; font-size: 8px; letter-spacing: 1px; background: #ffffffb0; padding: 5px 9px; border-radius: 3px; }.before-label { right: 15px; }.after-label { left: 15px; }
+.compare-divider { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #f8f6ed; }
+.compare-divider>span { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #f8f6ed; color: #7c806f; width: 27px; height: 27px; border-radius: 50%; display: grid; place-items: center; }
+@media(prefers-reduced-motion:reduce) { .after { clip-path: inset(0 0 0 50%); }.compare-divider { left: 50%; }.compare-progress { display: none; }.before-label { left: 15px; right: auto; }.after-label { right: 15px; left: auto; } }</style></head>
+<body><header class="demo-nav"><b>scrolllab.</b><span>27 / LIVE EXPERIMENT</span></header>
+<section class="intro">
+  <span class="eyebrow">SCROLL EXPERIMENT 27</span>
+  <h1>Same space.<br>A new feeling.</h1>
+  <p>아래로 스크롤하며 움직임을 확인하세요.<br>위로 돌아오면 효과를 다시 볼 수 있어요.</p>
+  <div class="scroll-hint">SCROLL TO DISCOVER<span>↓</span></div>
+</section>
+<section class="scene practice-scene compare-scene">
+  <span class="scene-label">27 — THE MOTION IN ACTION</span>
+<div class="practice-heading"><span class="practice-kicker">SPACES / BEFORE & AFTER</span><h2>A change in perspective.</h2></div><div class="comparison-view"><div class="room before" role="img" aria-label="회색 톤의 변경 전 공간"><div class="room-window"></div><div class="room-desk"></div><div class="room-vase"></div><div class="room-art"></div><span class="compare-label before-label">BEFORE</span></div><div class="room after" role="img" aria-label="따뜻한 색상의 변경 후 공간"><div class="room-window"></div><div class="room-desk"></div><div class="room-vase"></div><div class="room-art"></div><span class="compare-label after-label">AFTER</span></div><div class="compare-divider" aria-hidden="true"><span>↔</span></div></div><p class="compare-progress practice-status" role="progressbar" aria-label="변경 후 이미지 표시 비율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">AFTER 0%</p>
+</section>
+<section class="outro"><span class="eyebrow">NOW IT'S YOUR TURN</span><h2>Make it your own.</h2>
+  <p>색상, 문구, 옵션 값을 바꿔보세요.<br>위로 스크롤하면 처음으로 돌아갑니다.</p><span>↑</span></section>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script>
+if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+  
+  gsap.registerPlugin(ScrollTrigger);
+
+// 운영체제에서 '동작 줄이기'를 설정했다면 정적인 콘텐츠를 보여줍니다.
+const mm = gsap.matchMedia();
+mm.add("(prefers-reduced-motion: no-preference)", () => {
+  const progress = { value: 0 };
+  const output = document.querySelector(".compare-progress");
+  const tl = gsap.timeline({ scrollTrigger: {
+    trigger: ".compare-scene", start: "top top", end: "+=160%", pin: true, scrub: 0.6
+  }});
+  tl.fromTo(".after", { clipPath: "inset(0% 100% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", ease: "none" }, 0)
+    .to(".compare-divider", { left: "100%", ease: "none" }, 0)
+    .to(progress, { value: 100, ease: "none", onUpdate: () => {
+      const value = Math.round(progress.value);
+      output.textContent = "AFTER " + value + "%";
+      output.setAttribute("aria-valuenow", value);
+    } }, 0);
+});
+  // 웹폰트 등 레이아웃이 안정된 뒤 시작·끝 지점을 다시 측정합니다.
+  document.fonts.ready.then(() => ScrollTrigger.refresh());
+  
+} else {
+  
+  const notice = document.createElement("p");
+  notice.textContent = "GSAP을 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침해 주세요.";
+  notice.style.cssText = "position:fixed;bottom:0;left:0;right:0;padding:16px;background:#fff1c8;text-align:center;font:12px sans-serif;z-index:99";
+  document.body.append(notice);
+}
+</script></body></html>

@@ -8,8 +8,10 @@
   <title>Scroll Lab — 스크롤 애니메이션 도감</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="practice.css">
   <script defer src="sequence-frames.js"></script>
   <script defer src="advanced.js"></script>
+  <script defer src="practice.js"></script>
   <script defer src="demos.js"></script>
   <script defer src="app.js"></script>
 </head>
@@ -17,7 +19,7 @@
   <a class="skip-link" href="#collection">예제로 바로 가기</a>
   <header class="site-header wrap">
     <a class="brand" href="#" aria-label="Scroll Lab 처음으로"><span class="brand-symbol" aria-hidden="true">↘</span> scroll<span class="brand-light">lab</span><span class="brand-dot">.</span></a>
-    <nav aria-label="메인 메뉴"><a class="nav-active" href="#collection">애니메이션 탐색 <span data-count="all">20</span></a><a href="#guide">CodePen 사용법</a></nav>
+    <nav aria-label="메인 메뉴"><a class="nav-active" href="#collection">애니메이션 탐색 <span data-count="all">30</span></a><a href="#guide">CodePen 사용법</a></nav>
     <a class="docs-link" href="https://gsap.com/docs/v3/Plugins/ScrollTrigger/" target="_blank" rel="noopener">GSAP 문서 <span aria-hidden="true">↗</span></a>
   </header>
   <main>
@@ -25,7 +27,7 @@
       <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> A LITTLE SCROLL, A LOT OF POSSIBILITIES</p>
         <h1 id="hero-title">스크롤이 만드는<br>웹의 <span class="title-serif">다양한</span> 움직임<span class="purple">.</span></h1>
         <p class="hero-description">이름만으로는 알기 어려운 애니메이션.<br>직접 스크롤해 보고, 내 디자인에 맞는 움직임을 골라보세요.</p>
-        <a class="primary-link" href="#collection"><span class="primary-label"><b data-count="all">20</b>가지 움직임 둘러보기</span> <span aria-hidden="true">↓</span></a>
+        <a class="primary-link" href="#collection"><span class="primary-label"><b data-count="all">30</b>가지 움직임 둘러보기</span> <span aria-hidden="true">↓</span></a>
         <div class="tech-line"><span>HTML</span><span>CSS</span><span>JavaScript</span><i></i><span class="gsap-label">✳ GSAP + ScrollTrigger</span></div>
       </div>
       <div class="hero-art" aria-hidden="true">
@@ -38,10 +40,10 @@
     </section>
     <section class="collection wrap" id="collection" aria-labelledby="collection-title">
       <div class="section-heading"><div><p class="eyebrow muted">THE MOTION COLLECTION</p><h2 id="collection-title">어떤 움직임을 찾고 있나요?</h2></div><p>미리보기를 열고, 안에서 스크롤해 보세요. <span aria-hidden="true">↙</span></p></div>
-      <div class="stage-picker" role="group" aria-label="학습 과정"><button class="stage-option active" data-stage="all" aria-pressed="true"><span class="stage-eyebrow">EXPLORE ALL</span><span class="stage-title">전체 도감 <b data-count="all">20</b><i>↗</i></span><span class="stage-description">기본 움직임부터 완성된 장면까지</span></button><button class="stage-option" data-stage="basic" aria-pressed="false"><span class="stage-eyebrow">STEP 01 / FOUNDATIONS</span><span class="stage-title">기본 효과 <b data-count="basic">12</b><i>↗</i></span><span class="stage-description">한 가지 움직임의 원리를 익혀요</span></button><button class="stage-option stage-advanced" data-stage="advanced" aria-pressed="false"><span class="stage-eyebrow">STEP 02 / CREATIVE COMBINATIONS</span><span class="stage-title">심화 활용 <b data-count="advanced">8</b><i>↗</i></span><span class="stage-description">효과를 연결해 웹사이트의 장면을 만들어요</span></button></div>
-      <div class="stage-context" id="stage-context"><span class="context-mark">↳</span><p id="stage-description">작은 움직임을 익히고, 하나의 웹사이트 경험으로 연결해 보세요.</p><span>기본 12 + 심화 8</span></div>
+      <div class="stage-picker" role="group" aria-label="학습 과정"><button class="stage-option active" data-stage="all" aria-pressed="true"><span class="stage-eyebrow">EXPLORE ALL</span><span class="stage-title">전체 도감 <b data-count="all">30</b><i>↗</i></span><span class="stage-description">기본 움직임부터 완성된 장면까지</span></button><button class="stage-option" data-stage="basic" aria-pressed="false"><span class="stage-eyebrow">STEP 01 / FOUNDATIONS</span><span class="stage-title">기본 효과 <b data-count="basic">12</b><i>↗</i></span><span class="stage-description">한 가지 움직임의 원리를 익혀요</span></button><button class="stage-option stage-advanced" data-stage="advanced" aria-pressed="false"><span class="stage-eyebrow">STEP 02 / COMBINATIONS</span><span class="stage-title">심화 활용 <b data-count="advanced">8</b><i>↗</i></span><span class="stage-description">효과를 연결해 장면을 만들어요</span></button><button class="stage-option stage-practice" data-stage="practice" aria-pressed="false"><span class="stage-eyebrow">STEP 03 / REAL-WORLD MOTION</span><span class="stage-title">실무 응용 <b data-count="practice">10</b><i>↗</i></span><span class="stage-description">속도·방향·경로로 경험을 확장해요</span></button></div>
+      <div class="stage-context" id="stage-context"><span class="context-mark">↳</span><p id="stage-description">작은 움직임을 익히고, 하나의 웹사이트 경험으로 연결해 보세요.</p><span>기본 12 + 심화 8 + 실무 10</span></div>
       <div class="collection-toolbar"><div class="filters" role="group" aria-label="애니메이션 종류"><button class="filter active" data-filter="all" aria-pressed="true">전체 유형</button><button class="filter" data-filter="entrance" aria-pressed="false">기본 등장</button><button class="filter" data-filter="scroll" aria-pressed="false">스크롤 연동</button><button class="filter" data-filter="pin" aria-pressed="false">화면 고정</button><button class="filter favorite-filter" data-filter="saved" aria-pressed="false">♡ 저장한 효과 <span id="saved-count">0</span></button></div><label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="효과·사용 위치 검색" aria-label="효과 이름 검색"></label></div>
-      <div class="result-line"><span id="result-count" aria-live="polite">20개의 애니메이션</span><span id="result-hint">기본과 심화를 함께 탐색하고 비교해 보세요</span></div>
+      <div class="result-line"><span id="result-count" aria-live="polite">30개의 애니메이션</span><span id="result-hint">기본·심화·실무 응용을 함께 비교해 보세요</span></div>
       <div class="card-grid" id="card-grid"></div>
       <div class="empty-state" id="empty-state" hidden><span>↗</span><h3>아직 여기는 비어 있어요.</h3><p>다른 검색어를 입력하거나, 마음에 드는 효과의 ♡를 눌러보세요.</p><button class="text-button" id="reset-filter">전체 효과 보기 →</button></div>
     </section>

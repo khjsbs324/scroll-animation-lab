@@ -2,7 +2,7 @@
 
 학생들이 스크롤 효과를 직접 비교하고 CodePen에서 수정할 수 있는 HTML · CSS · JavaScript 예제 모음입니다. Figma의 브랜드 소개, 상품, 포트폴리오 화면에 적용할 움직임을 고르는 용도로 사용할 수 있습니다. 특정 Figma 화면을 복제한 결과물은 아닙니다.
 
-**기본 효과 12종 + 심화 활용 8종, 총 20종**을 제공합니다. 상단의 전체·기본·심화 버튼과 효과 유형·검색·저장 필터를 함께 사용할 수 있습니다. 과정(기본/심화)과 코드 난이도(입문/중급/고급)는 별도로 표시합니다.
+**기본 효과 12종 + 심화 활용 8종 + 실무 응용 10종, 총 30종**을 제공합니다. 상단의 전체·기본·심화·실무 버튼과 효과 유형·검색·저장 필터를 함께 사용할 수 있습니다. 과정과 코드 난이도(입문/중급/고급)는 별도로 표시합니다.
 
 ## 온라인 데모
 
@@ -59,7 +59,26 @@ GitHub Pages는 `main` 브랜치의 루트 폴더를 사용합니다. 별도 빌
 | 19 | 레이아웃 변신 | Flip으로 썸네일을 큰 비주얼로 전환 | 프로젝트, 갤러리 |
 | 20 | 3D 카드 공간 이동 | perspective + 깊이·회전·순차 정렬 | 전시, 포트폴리오 |
 
-심화 과정의 이전·다음 버튼은 현재 검색·필터 결과 안에서 이동합니다. ‘전체 도감’을 선택하면 기본과 심화를 함께 탐색합니다. 제품 이름과 비주얼은 교육용 가상 브랜드입니다.
+심화 과정의 이전·다음 버튼은 현재 검색·필터 결과 안에서 이동합니다. ‘전체 도감’을 선택하면 기본·심화·실무 응용을 함께 탐색합니다. 제품 이름과 비주얼은 교육용 가상 브랜드입니다.
+
+## 실무 응용 10종
+
+| 번호 | 효과 | 관찰할 움직임 | 적용 위치 |
+| --- | --- | --- | --- |
+| 21 | 스크롤 속도 반응 | 빠르게 스크롤하면 기울고 멈추면 복원 | 이미지 중심 포트폴리오 |
+| 22 | 방향 반응 마퀴 | 스크롤 방향에 따라 글자 트랙의 재생 방향·속도 변화 | 브랜드 슬로건, 배너 |
+| 23 | 원형 갤러리 | 휠 회전과 카드의 반대 방향 회전 보정 | 컬렉션, 전시 |
+| 24 | 곡선 경로 이동 | SVG 경로를 따라 오브젝트 이동·회전 | 서비스 여정, 제작 과정 |
+| 25 | SVG 모핑 | 씨앗 → 잎 → 꽃으로 path 변형 | 브랜드 심벌, 콘셉트 소개 |
+| 26 | 글자 분해·재조립 | 흩어진 글자들이 모여 문장 완성 | 캠페인, 스튜디오 소개 |
+| 27 | 비포·애프터 비교 | 겹친 두 비주얼의 경계 이동 | 리모델링, 디자인 개선 |
+| 28 | 스크롤 아코디언 | 설명을 순서대로 펼치고 비주얼 교체 | 서비스 기능, 제품 특징 |
+| 29 | 커튼형 장면 전환 | 두 패널이 양옆으로 열리며 새 장면 공개 | 프로젝트 인트로 |
+| 30 | 양방향 갤러리 | 열마다 다른 방향과 속도로 이미지 이동 | 포트폴리오, 무드보드 |
+
+21번은 빠르게 스크롤한 뒤 멈추고, 22번은 위아래 방향을 바꾸며 관찰하세요. 위치에 따른 진행률과 속도·방향에 대한 반응의 차이를 비교할 수 있습니다. 비포·애프터의 공간과 갤러리 이미지는 CSS 일러스트이므로 별도 이미지 파일 없이 실행됩니다.
+
+상단 과정 선택은 모바일에서 2열로 표시합니다. 각 과정의 이전·다음 버튼은 현재 검색·필터 결과 안에서 이동합니다.
 
 ## CodePen으로 직접 옮기기
 
@@ -83,6 +102,13 @@ https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js
 
 ```text
 https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/Flip.min.js
+```
+
+**24번 곡선 경로 이동**에는 MotionPathPlugin을, **25번 SVG 모핑**에는 MorphSVGPlugin을 추가합니다. 해당 예제에 필요한 항목만 기본 GSAP·ScrollTrigger 뒤에 추가하면 됩니다.
+
+```text
+https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js
+https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MorphSVGPlugin.min.js
 ```
 
 ## 이미지 시퀀스 교체하기
@@ -111,11 +137,13 @@ const images = urls.map(url => {
 - `styles.css`: 도감의 반응형 스타일
 - `demos.js`: 예제 데이터, 독립 HTML · CSS · JS, 실행 문서 생성
 - `advanced.js`: 심화 8종의 장면 구성, 학습 설명, 예제별 라이브러리
+- `practice.js`: 실무 응용 10종의 독립 예제와 학습 설명
+- `practice.css`: 실무 과정 선택과 탐색 카드의 스타일
 - `sequence-frames.js`: 학습용 제품 회전 프레임 생성기
 - `app.js`: 검색, 분류, 저장, 복사, 미리보기, 다운로드, CodePen 전송
 - `export-examples.js`: 예제를 파일로 내보내는 Node.js 스크립트
 
-기본 예제는 `demos.js`, 심화 예제는 `advanced.js`에서 수정합니다. 수정한 뒤 `node export-examples.js`를 실행하면 20개 예제와 48개 SVG 프레임을 함께 갱신합니다. 배포나 수업용 공유 시에는 폴더 전체를 전달하세요.
+기본 예제는 `demos.js`, 심화 예제는 `advanced.js`, 실무 예제는 `practice.js`에서 수정합니다. 수정한 뒤 `node export-examples.js`를 실행하면 30개 예제와 48개 SVG 프레임을 함께 갱신합니다. 배포나 수업용 공유 시에는 폴더 전체를 전달하세요.
 
 사진 없이도 효과에 집중할 수 있도록 CSS 도형과 타이포그래피로 데모를 구성했습니다. 실제 디자인에 적용할 때 이미지 영역을 사진으로 교체할 수 있습니다. 가로 스크롤은 실제 넘치는 너비를 기준으로 이동 거리를 계산하며, 화면 고정은 부모 요소를 고정하고 내부 요소를 움직입니다.
 
@@ -125,3 +153,6 @@ const images = urls.map(url => {
 - [GSAP matchMedia](https://gsap.com/docs/v3/GSAP/gsap.matchMedia()/): 동작 줄이기 및 미디어 쿼리 처리
 - [CodePen Prefill API](https://blog.codepen.io/documentation/prefill/): 편집기로 코드와 라이브러리 설정 전달
 - [GSAP Flip](https://gsap.com/docs/v3/Plugins/Flip/): 레이아웃 상태 사이의 전환
+- [MotionPathPlugin](https://gsap.com/docs/v3/Plugins/MotionPathPlugin/): 경로 이동과 방향 정렬
+- [MorphSVGPlugin](https://gsap.com/docs/v3/Plugins/MorphSVGPlugin/): SVG 형태 변형
+- [ScrollTrigger getVelocity](https://gsap.com/docs/v3/Plugins/ScrollTrigger/getVelocity()/): 스크롤 속도 측정

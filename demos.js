@@ -72,6 +72,7 @@ ${code.split('\n').map(line => line ? '  ' + line : '').join('\n')}
 });`;
 
   const createAdvanced = typeof module !== 'undefined' && module.exports ? require('./advanced.js') : root.ScrollLabAdvanced;
+  const createPractice = typeof module !== 'undefined' && module.exports ? require('./practice.js') : root.ScrollLabPractice;
   const demos = [
     {
       id: 'fade-up', en: 'Fade Up', title: '페이드 업', category: 'entrance', level: 'beginner',
@@ -484,7 +485,7 @@ gsap.to(number, {
   }
 });`
     }
-  ].concat(createAdvanced({ wrapHTML })).map((demo, index) => ({
+  ].concat(createAdvanced({ wrapHTML }), createPractice({ wrapHTML })).map((demo, index) => ({
     ...demo, stage: demo.stage || 'basic',
     libraries: [...libraries, ...(demo.extraLibraries || [])],
     number: String(index + 1).padStart(2, '0'),
