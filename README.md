@@ -10,6 +10,8 @@
 
 GitHub Pages는 `main` 브랜치의 루트 폴더를 사용합니다. 별도 빌드나 서버가 필요 없는 정적 사이트입니다.
 
+CSS와 JavaScript 주소에는 파일 내용에 따른 버전 값이 붙습니다. 업데이트 뒤 이전 파일이 브라우저에 남는 문제를 줄이기 위한 설정입니다. `node export-examples.js`는 예제 내보내기와 파일 버전 갱신을 함께 실행합니다. 버전만 갱신하려면 `node version-assets.js`를 실행하세요.
+
 ## 실행
 
 `index.html`을 크롬에서 열면 도감을 사용할 수 있습니다. GSAP 3.13.0과 ScrollTrigger는 CDN으로 불러오므로 인터넷 연결이 필요합니다. 도감의 폰트가 로드되지 않아도 시스템 글꼴로 표시합니다.
@@ -142,6 +144,7 @@ const images = urls.map(url => {
 - `sequence-frames.js`: 학습용 제품 회전 프레임 생성기
 - `app.js`: 검색, 분류, 저장, 복사, 미리보기, 다운로드, CodePen 전송
 - `export-examples.js`: 예제를 파일로 내보내는 Node.js 스크립트
+- `version-assets.js`: CSS·JavaScript 내용 해시를 주소에 반영하고 배포 버전 표시를 갱신
 
 기본 예제는 `demos.js`, 심화 예제는 `advanced.js`, 실무 예제는 `practice.js`에서 수정합니다. 수정한 뒤 `node export-examples.js`를 실행하면 30개 예제와 48개 SVG 프레임을 함께 갱신합니다. 배포나 수업용 공유 시에는 폴더 전체를 전달하세요.
 

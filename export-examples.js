@@ -16,4 +16,5 @@ fs.mkdirSync(framesDirectory, { recursive: true });
 for (let index = 0; index < count; index++) {
   fs.writeFileSync(path.join(framesDirectory, `frame-${String(index + 1).padStart(3, '0')}.svg`), createFrame(index, count));
 }
-console.log(`Exported ${demos.length} independent examples.`);
+const version = require('./version-assets.js')();
+console.log(`Exported ${demos.length} independent examples. Build: ${version.build}`);
