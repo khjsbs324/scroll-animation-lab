@@ -1,0 +1,49 @@
+/* 공통 레이아웃: 위아래 여백은 스크롤할 공간을 만듭니다. */
+* { box-sizing: border-box; }
+body { margin: 0; background: #f6f5ef; color: #363d31;
+  font-family: Arial, "Noto Sans KR", sans-serif; }
+html { overflow-x: hidden; }
+.demo-nav { position: absolute; top: 0; left: 0; width: 100%; padding: 22px 6%;
+  display: flex; justify-content: space-between; font-size: 10px; z-index: 2; }
+.demo-nav b { font-size: 15px; letter-spacing: -0.8px; }
+.intro, .outro { min-height: 82vh; padding: 90px 8% 50px; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.eyebrow { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; }
+.intro h1 { font-size: clamp(32px, 6vw, 60px); line-height: 1.2;
+  font-weight: 400; letter-spacing: -2px; margin: 20px 0; }
+.intro p, .outro p { font-size: 12px; color: #89917f; line-height: 1.9; }
+.scroll-hint { margin-top: 35px; font-size: 11px; }
+.scroll-hint span { display: block; font-size: 24px; margin-top: 10px; }
+.scene { min-height: 88vh; padding: 70px 8%; display: flex;
+  flex-direction: column; align-items: center; justify-content: center; position: relative; }
+.scene-label { position: absolute; top: 24px; left: 6%; font-size: 9px;
+  letter-spacing: 1.5px; opacity: .55; }
+.outro { min-height: 110vh; } /* 마지막 효과도 끝까지 진행할 스크롤 여백 */
+.outro h2 { font-size: 34px; font-weight: 400; letter-spacing: -1px; }
+.poster { width: min(100%, 360px); min-height: 330px; padding: 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: #d8e0ce; border-radius: 3px; }
+.poster small { font-size: 9px; letter-spacing: 1.5px; }
+.poster h2 { font-size: clamp(38px, 7vw, 62px); font-weight: 400;
+  line-height: 1; letter-spacing: -2px; margin: 30px 0; }
+.poster-foot { display: flex; justify-content: space-between; font-size: 9px; }
+.orb { width: 100px; height: 100px; background: #9aa988; border-radius: 50%; }
+@media (max-width: 480px) {
+  .scene { padding: 65px 7%; }
+  .intro h1 { font-size: 38px; }
+  .poster { min-height: 300px; padding: 25px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* 이 예제의 스타일 */
+.reading-progress { position: fixed; top: 0; left: 0; width: 100%; height: 5px;
+  background: #7b915d; z-index: 10; transform: scaleX(0); transform-origin: left; }
+.scene { background: #e5e9d9; }
+.progress-story { width: 100%; }
+.progress-story h2 { font-size: clamp(34px,6vw,60px); line-height: 1.1; letter-spacing: -2px; font-weight: 400; }
+.progress-story p { font-size: 12px; line-height: 1.9; color: #8f9a7b; }
+.bar-track { width: 100%; height: 13px; margin-top: 35px; background: #ced8bc; }
+.bar-fill { height: 100%; width: 100%; background: #7b915d; transform-origin: left; }
+@media(prefers-reduced-motion:reduce) { .reading-progress, .bar-track, .progress-percent { display: none; } }

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f2">
+  <meta name="description" content="직접 스크롤하고, 비교하고, CodePen으로 가져가는 GSAP 스크롤 애니메이션 도감.">
+  <title>Scroll Lab — 스크롤 애니메이션 도감</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="demos.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#collection">예제로 바로 가기</a>
+  <header class="site-header wrap">
+    <a class="brand" href="#" aria-label="Scroll Lab 처음으로"><span class="brand-symbol" aria-hidden="true">↘</span> scroll<span class="brand-light">lab</span><span class="brand-dot">.</span></a>
+    <nav aria-label="메인 메뉴"><a class="nav-active" href="#collection">애니메이션 탐색 <span>12</span></a><a href="#guide">CodePen 사용법</a></nav>
+    <a class="docs-link" href="https://gsap.com/docs/v3/Plugins/ScrollTrigger/" target="_blank" rel="noopener">GSAP 문서 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy"><p class="eyebrow"><span class="status-dot"></span> A LITTLE SCROLL, A LOT OF POSSIBILITIES</p>
+        <h1 id="hero-title">스크롤이 만드는<br>웹의 <span class="title-serif">다양한</span> 움직임<span class="purple">.</span></h1>
+        <p class="hero-description">이름만으로는 알기 어려운 애니메이션.<br>직접 스크롤해 보고, 내 디자인에 맞는 움직임을 골라보세요.</p>
+        <a class="primary-link" href="#collection">12가지 움직임 둘러보기 <span aria-hidden="true">↓</span></a>
+        <div class="tech-line"><span>HTML</span><span>CSS</span><span>JavaScript</span><i></i><span class="gsap-label">✳ GSAP + ScrollTrigger</span></div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-grid"></div><span class="art-corner corner-one">+</span><span class="art-corner corner-two">+</span>
+        <span class="art-label">SCROLL TO EXPLORE</span><span class="art-coordinate">X: 120 / Y: 360</span>
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div>
+        <div class="art-ball"><span>↓</span></div><div class="art-chip chip-scrub"><span class="tiny-dot"></span> scrub: 1</div><div class="art-chip chip-y">y: <strong>−80</strong><span>px</span></div>
+        <div class="art-caption"><span>01 — INFINITE POSSIBILITIES</span><span>↘</span></div>
+      </div>
+    </section>
+    <section class="collection wrap" id="collection" aria-labelledby="collection-title">
+      <div class="section-heading"><div><p class="eyebrow muted">THE MOTION COLLECTION</p><h2 id="collection-title">어떤 움직임을 찾고 있나요?</h2></div><p>미리보기를 열고, 안에서 스크롤해 보세요. <span aria-hidden="true">↙</span></p></div>
+      <div class="collection-toolbar"><div class="filters" role="group" aria-label="애니메이션 종류"><button class="filter active" data-filter="all" aria-pressed="true">전체 <span>12</span></button><button class="filter" data-filter="entrance" aria-pressed="false">기본 등장</button><button class="filter" data-filter="scroll" aria-pressed="false">스크롤 연동</button><button class="filter" data-filter="pin" aria-pressed="false">화면 고정</button><button class="filter favorite-filter" data-filter="saved" aria-pressed="false">♡ 저장한 효과 <span id="saved-count">0</span></button></div><label class="search-box"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="효과 이름 검색" aria-label="효과 이름 검색"></label></div>
+      <div class="result-line"><span id="result-count" aria-live="polite">12개의 애니메이션</span><span>작은 움직임부터, 몰입감 있는 장면까지</span></div>
+      <div class="card-grid" id="card-grid"></div>
+      <div class="empty-state" id="empty-state" hidden><span>↗</span><h3>아직 여기는 비어 있어요.</h3><p>다른 검색어를 입력하거나, 마음에 드는 효과의 ♡를 눌러보세요.</p><button class="text-button" id="reset-filter">전체 효과 보기 →</button></div>
+    </section>
+    <section class="concepts wrap" aria-labelledby="concepts-title"><div class="concept-intro"><p class="eyebrow muted">BEFORE YOU START</p><h2 id="concepts-title">세 가지만 알면<br>더 잘 보일 거예요<span class="purple">.</span></h2><a href="https://gsap.com/docs/v3/Plugins/ScrollTrigger/" target="_blank" rel="noopener">ScrollTrigger 공식 가이드 ↗</a></div><div class="concept"><span class="concept-icon">↧</span><code>start</code><h3>언제 시작할까요?</h3><p><code>"top 80%"</code>는 요소의 위쪽이 화면 높이 80% 지점에 닿을 때 시작한다는 뜻이에요.</p></div><div class="concept"><span class="concept-icon">↕</span><code>scrub</code><h3>스크롤을 따라 움직여요.</h3><p><code>scrub: 1</code>은 스크롤 위치와 애니메이션 진행률을 연결하고, 약 1초 동안 부드럽게 따라오게 해요.</p></div><div class="concept"><span class="concept-icon">⌖</span><code>pin</code><h3>한 장면에 머물러요.</h3><p><code>pin: true</code>는 지정한 구간에서 화면을 고정해요. 고정한 요소 안의 콘텐츠를 움직여보세요.</p></div></section>
+    <section class="guide wrap" id="guide" aria-labelledby="guide-title"><div><p class="eyebrow">YOUR NEXT STEP</p><h2 id="guide-title">마음에 드는 움직임을,<br>내 CodePen으로.</h2><p>별도 빌드 없이 HTML · CSS · JS만으로 시작하세요.</p></div><ol><li><span>01</span><div><h3>예제를 열고 직접 스크롤해요.</h3><p>효과 설명과 핵심 옵션을 함께 확인하세요.</p></div></li><li><span>02</span><div><h3>‘CodePen에서 열기’를 눌러요.</h3><p>세 패널과 GSAP 라이브러리가 설정된 새 편집기가 열려요.</p></div></li><li><span>03</span><div><h3>내 디자인으로 바꿔보세요.</h3><p>문구, 색상, 이동 거리를 수정하며 차이를 관찰해요.</p></div></li></ol><details class="manual-guide"><summary>직접 복사해서 옮기고 싶다면 <span>+</span></summary><div><p>예제의 HTML, CSS, JS 탭에서 각각 복사한 뒤 CodePen의 같은 패널에 붙여넣으세요. HTML 패널에는 본문만 넣습니다.</p><p>CodePen의 <strong>Settings → JS → Add External Scripts/Pens</strong>에 아래 주소를 순서대로 추가하세요.</p><code>https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js<br>https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js</code><p>각 예제의 ‘HTML 파일 받기’는 CSS와 JS까지 포함한 완성 파일입니다. 인터넷에 연결된 브라우저에서 바로 열 수 있어요.</p></div></details></section>
+  </main>
+  <footer class="site-footer wrap"><a class="brand" href="#">scroll<span class="brand-light">lab</span>.</a><p>보고, 스크롤하고, 만들어보세요.</p><span>A small library for big ideas. © 2026</span></footer>
+  <dialog id="demo-dialog" aria-labelledby="dialog-title"><div class="studio"><header class="studio-header"><button class="icon-button close-studio" id="close-dialog" aria-label="미리보기 닫기">←</button><div class="studio-title"><span id="dialog-number">01</span><h2 id="dialog-title"></h2><span id="dialog-en"></span></div><div class="studio-navigation"><button class="icon-button" id="previous-demo" aria-label="이전 예제">←</button><span id="demo-position">1 / 12</span><button class="icon-button" id="next-demo" aria-label="다음 예제">→</button></div></header><div class="studio-body"><section class="preview-column" aria-label="실시간 스크롤 미리보기"><div class="preview-toolbar"><span><i></i> LIVE PREVIEW</span><div><label class="markers-toggle"><input type="checkbox" id="markers"> 시작·끝 표시</label><button id="restart-demo" title="미리보기를 처음부터 다시 시작">↻ 재시작</button></div></div><div class="iframe-shell"><iframe id="demo-frame" title="스크롤 애니메이션 미리보기" sandbox="allow-scripts allow-same-origin" src="about:blank"></iframe><div class="load-status" id="load-status">예제 준비 중…</div></div><div class="preview-footnote"><span>↕ 미리보기 안에서 스크롤해 보세요.</span><button class="text-button" id="demo-save">♡ 효과 저장</button></div></section><aside class="code-column"><div class="effect-explanation"><div id="dialog-tags"></div><h3 id="dialog-subtitle"></h3><p id="dialog-description"></p><div class="use-case"><span>어디에 쓰나요?</span><p id="dialog-use"></p></div><div class="key-option"><span>KEY OPTION</span><code id="dialog-option"></code></div><p class="experiment" id="dialog-experiment"></p></div><div class="code-area"><div class="code-tabs" role="tablist" aria-label="예제 코드"><button role="tab" id="tab-html" aria-controls="code-panel" aria-selected="false" data-tab="html">HTML</button><button role="tab" id="tab-css" aria-controls="code-panel" aria-selected="false" data-tab="css" tabindex="-1">CSS</button><button class="active" role="tab" id="tab-js" aria-controls="code-panel" aria-selected="true" data-tab="js" tabindex="0">JS</button><button class="copy-button" id="copy-code">복사 ↗</button></div><pre id="code-panel" role="tabpanel" aria-labelledby="tab-js" tabindex="0"><code id="code-content"></code></pre></div><div class="studio-actions"><button id="open-codepen" class="codepen-button">CodePen에서 열기 <span>↗</span></button><button id="download-demo" class="download-button">↓ HTML 파일 받기</button><p>GSAP + ScrollTrigger 포함 · 회원가입 없이 미리보기 가능</p></div></aside></div></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
