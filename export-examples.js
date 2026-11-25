@@ -2,6 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { demos, buildDocument } = require('./demos.js');
+const { createFrame, count } = require('./sequence-frames.js');
 for (const demo of demos) {
   const directory = path.join(__dirname, 'examples', `${demo.number}-${demo.id}`);
   fs.mkdirSync(directory, { recursive: true });
@@ -9,5 +10,10 @@ for (const demo of demos) {
   fs.writeFileSync(path.join(directory, 'codepen.html'), demo.html + '\n');
   fs.writeFileSync(path.join(directory, 'style.css'), demo.css + '\n');
   fs.writeFileSync(path.join(directory, 'script.js'), demo.js + '\n');
+}
+const framesDirectory = path.join(__dirname, 'assets', 'sequence');
+fs.mkdirSync(framesDirectory, { recursive: true });
+for (let index = 0; index < count; index++) {
+  fs.writeFileSync(path.join(framesDirectory, `frame-${String(index + 1).padStart(3, '0')}.svg`), createFrame(index, count));
 }
 console.log(`Exported ${demos.length} independent examples.`);

@@ -71,6 +71,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 ${code.split('\n').map(line => line ? '  ' + line : '').join('\n')}
 });`;
 
+  const createAdvanced = typeof module !== 'undefined' && module.exports ? require('./advanced.js') : root.ScrollLabAdvanced;
   const demos = [
     {
       id: 'fade-up', en: 'Fade Up', title: '페이드 업', category: 'entrance', level: 'beginner',
@@ -483,7 +484,13 @@ gsap.to(number, {
   }
 });`
     }
-  ].map((demo, index) => ({ ...demo, number: String(index + 1).padStart(2, '0'), css: baseCSS + '\n\n/* 이 예제의 스타일 */\n' + demo.css, js: wrapJS(demo.js) }));
+  ].concat(createAdvanced({ wrapHTML })).map((demo, index) => ({
+    ...demo, stage: demo.stage || 'basic',
+    libraries: [...libraries, ...(demo.extraLibraries || [])],
+    number: String(index + 1).padStart(2, '0'),
+    css: baseCSS + '\n\n/* 이 예제의 스타일 */\n' + demo.css,
+    js: (demo.setupJS ? demo.setupJS + '\n\n' : '') + wrapJS(demo.js)
+  }));
 
   const escapeText = text => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   function buildDocument(demo, options = {}) {
@@ -497,14 +504,14 @@ window.addEventListener("error", () => report("error"));
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${escapeText(demo.title)} — Scroll Lab</title><style>${demo.css}</style></head>
 <body>${demo.html}${bridge}
-${libraries.map(url => `<script src="${url}"><\/script>`).join('\n')}
+${demo.libraries.map(url => `<script src="${url}"><\/script>`).join('\n')}
 <script>
-if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined"${(demo.requires || []).map(name => ` && typeof ${name} !== "undefined"`).join('')}) {
   ${options.markers ? 'gsap.registerPlugin(ScrollTrigger); ScrollTrigger.defaults({ markers: true });' : ''}
   ${demo.js}
   // 웹폰트 등 레이아웃이 안정된 뒤 시작·끝 지점을 다시 측정합니다.
   document.fonts.ready.then(() => ScrollTrigger.refresh());
-  ${options.preview ? 'report("ready");' : ''}
+  ${options.preview ? `Promise.resolve(${demo.id === 'image-sequence' ? 'framesReady' : 'undefined'}).then(() => report("ready")).catch(() => report("error"));` : ''}
 } else {
   ${options.preview ? 'report("error");' : ''}
   const notice = document.createElement("p");

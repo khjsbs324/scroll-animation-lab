@@ -1,9 +1,15 @@
 (() => {
   'use strict';
-  const { demos, libraries, buildDocument } = window.ScrollLab;
+  const { demos, buildDocument, escapeText } = window.ScrollLab;
   const $ = selector => document.querySelector(selector);
   const categoryNames = { entrance: '기본 등장', scroll: '스크롤 연동', pin: '화면 고정' };
-  const levelNames = { beginner: '입문', intermediate: '응용', advanced: '심화' };
+  const levelNames = { beginner: '입문', intermediate: '중급', advanced: '고급' };
+  const stageNames = { basic: '기본 효과', advanced: '심화 활용' };
+  const stageDescriptions = {
+    all: '작은 움직임을 익히고, 하나의 웹사이트 경험으로 연결해 보세요.',
+    basic: '한 가지 효과의 시작·진행·끝을 관찰해 보세요. 심화 활용을 만드는 재료가 됩니다.',
+    advanced: '여러 효과의 타이밍을 연결한 장면입니다. 예제 안에서 진행 순서와 조합한 기본 효과를 확인하세요.'
+  };
   const knownIds = new Set(demos.map(demo => demo.id));
   let saved = new Set();
   try {
@@ -11,6 +17,7 @@
     if (Array.isArray(stored)) saved = new Set(stored.filter(id => knownIds.has(id)));
   } catch { /* 저장소를 사용할 수 없는 환경에서도 예제는 동작합니다. */ }
   let filter = 'all';
+  let stage = 'all';
   let query = '';
   let current = demos[0];
   let activeTab = 'js';
@@ -19,6 +26,13 @@
   let previewToken;
   let returnFocus;
   const dialog = $('#demo-dialog');
+  const learningPanel = document.createElement('div');
+  learningPanel.className = 'learning-panel';
+  $('.effect-explanation').append(learningPanel);
+  document.querySelectorAll('[data-count]').forEach(el => {
+    el.textContent = demos.filter(demo => el.dataset.count === 'all' || demo.stage === el.dataset.count).length;
+  });
+  $('#stage-context > span:last-child').textContent = `기본 ${demos.filter(d=>d.stage==='basic').length} + 심화 ${demos.filter(d=>d.stage==='advanced').length}`;
 
   function toast(message) {
     const el = $('#toast');
@@ -37,26 +51,52 @@
     updateSaveButton();
   }
 
-  function renderCards() {
-    const visible = demos.filter(demo => {
+  function getVisibleDemos() {
+    return demos.filter(demo => {
+      const inStage = stage === 'all' || demo.stage === stage;
       const inCategory = filter === 'all' || (filter === 'saved' ? saved.has(demo.id) : demo.category === filter);
-      const haystack = `${demo.title} ${demo.en} ${demo.short} ${demo.use} ${categoryNames[demo.category]}`.toLowerCase();
-      return inCategory && haystack.includes(query.toLowerCase().trim());
+      const haystack = `${demo.title} ${demo.en} ${demo.short} ${demo.use} ${categoryNames[demo.category]} ${stageNames[demo.stage]} ${(demo.skills || []).join(' ')}`.toLowerCase();
+      return inStage && inCategory && haystack.includes(query.toLowerCase().trim());
     });
+  }
+
+  function updateNavigation() {
+    const visible = getVisibleDemos();
+    const index = visible.findIndex(demo => demo.id === current.id);
+    $('#demo-position').textContent = index < 0 ? '선택한 효과' : `${index + 1} / ${visible.length}`;
+    $('#previous-demo').disabled = visible.length < 2;
+    $('#next-demo').disabled = visible.length < 2;
+  }
+
+  function renderCards() {
+    const visible = getVisibleDemos();
     $('#card-grid').innerHTML = visible.map(demo => `
-      <article class="motion-card" data-id="${demo.id}">
+      <article class="motion-card ${demo.stage === 'advanced' ? 'advanced-card' : ''}" data-id="${demo.id}">
         <button class="card-preview" data-open="${demo.id}" aria-label="${demo.title} 미리보기 열기" style="--scene-bg:${demo.bg};--scene-ink:${demo.ink}">
           <span class="preview-grid"></span><span class="preview-topline"><span>EXPERIMENT ${demo.number}</span><span>↗</span></span>
-          ${demo.thumbnail}<span class="preview-caption">${demo.en.toUpperCase()} / SCROLL EXPLORATION</span><span class="play-badge" aria-hidden="true">↗</span>
+          ${demo.thumbnail}${demo.stage === 'advanced' ? '<span class="advanced-preview-badge">✳ CREATIVE COMBINATION</span>' : ''}<span class="preview-caption">${demo.en.toUpperCase()} / SCROLL EXPLORATION</span><span class="play-badge" aria-hidden="true">↗</span>
         </button>
         <div class="card-body"><div class="card-meta"><span class="card-number">${demo.number}</span><span>${demo.en}</span><button class="save-card ${saved.has(demo.id) ? 'saved' : ''}" data-save="${demo.id}" aria-label="${demo.title} 저장" aria-pressed="${saved.has(demo.id)}">${saved.has(demo.id) ? '♥' : '♡'}</button></div>
           <h3 class="card-title"><button data-open="${demo.id}">${demo.title}</button></h3><p class="card-description">${demo.short}</p>
-          <div class="card-bottom"><span class="type-tag ${demo.category}">${categoryNames[demo.category]}</span><span class="level ${demo.level}"><i></i>${levelNames[demo.level]}</span></div>
+          <div class="card-bottom"><div class="card-tags"><span class="stage-tag ${demo.stage}">${stageNames[demo.stage]}</span><span class="type-tag ${demo.category}">${categoryNames[demo.category]}</span></div><span class="level ${demo.level}"><i></i>난이도 ${levelNames[demo.level]}</span></div>
         </div>
       </article>`).join('');
     $('#empty-state').hidden = visible.length > 0;
     $('#result-count').textContent = `${visible.length}개의 애니메이션`;
     $('#saved-count').textContent = saved.size;
+    $('#stage-description').textContent = stageDescriptions[stage];
+    $('#stage-context').dataset.stage = stage;
+    $('#result-hint').textContent = stage === 'advanced' ? '각 예제에서 장면 흐름과 조합한 기본 효과를 확인하세요' : '기본과 심화를 함께 탐색하고 비교해 보세요';
+    if (dialog.open) updateNavigation();
+  }
+
+  function setStage(value) {
+    stage = value;
+    document.querySelectorAll('[data-stage].stage-option').forEach(button => {
+      button.classList.toggle('active', button.dataset.stage === value);
+      button.setAttribute('aria-pressed', String(button.dataset.stage === value));
+    });
+    renderCards();
   }
 
   function setFilter(value) {
@@ -120,8 +160,10 @@
     $('#dialog-use').textContent = demo.use;
     $('#dialog-option').textContent = demo.option;
     $('#dialog-experiment').textContent = demo.experiment;
-    $('#dialog-tags').innerHTML = `<span class="type-tag ${demo.category}">${categoryNames[demo.category]}</span><span class="type-tag">${levelNames[demo.level]}</span>`;
-    $('#demo-position').textContent = `${demos.indexOf(demo) + 1} / ${demos.length}`;
+    $('#dialog-tags').innerHTML = `<span class="stage-tag ${demo.stage}">${stageNames[demo.stage]}</span><span class="type-tag ${demo.category}">${categoryNames[demo.category]}</span><span class="type-tag">난이도 ${levelNames[demo.level]}</span>`;
+    learningPanel.hidden = demo.stage !== 'advanced';
+    learningPanel.innerHTML = demo.stage === 'advanced' ? `<details open><summary>이 장면은 어떻게 이어지나요? <span>−</span></summary><ol class="scene-flow">${demo.flow.map((text,index)=>`<li><b>${String(index + 1).padStart(2,'0')}</b><span>${escapeText(text)}</span></li>`).join('')}</ol><div class="skills-label">조합한 기본 효과</div><div class="skill-chips">${demo.skills.map(text=>`<span>${escapeText(text)}</span>`).join('')}</div>${demo.assetNote ? `<p class="asset-note">${escapeText(demo.assetNote)}</p>` : ''}<p class="library-note">${demo.extraLibraries ? '추가 라이브러리: GSAP Flip · CodePen에 자동 설정됩니다.' : 'HTML · CSS · JS + GSAP / 별도 프레임워크 없이 실행'}</p></details>` : '';
+    updateNavigation();
     updateSaveButton();
     renderCode(activeTab);
     loadPreview();
@@ -142,8 +184,14 @@
   });
   dialog.addEventListener('click', event => { if (event.target === dialog) closeDemo(); });
   $('#close-dialog').addEventListener('click', closeDemo);
-  $('#previous-demo').addEventListener('click', () => openDemo(demos[(demos.indexOf(current) - 1 + demos.length) % demos.length].id));
-  $('#next-demo').addEventListener('click', () => openDemo(demos[(demos.indexOf(current) + 1) % demos.length].id));
+  function navigateDemo(direction) {
+    const visible = getVisibleDemos();
+    if (!visible.length) return;
+    const index = visible.findIndex(demo => demo.id === current.id);
+    openDemo(visible[(index + direction + visible.length) % visible.length].id);
+  }
+  $('#previous-demo').addEventListener('click', () => navigateDemo(-1));
+  $('#next-demo').addEventListener('click', () => navigateDemo(1));
   $('#restart-demo').addEventListener('click', loadPreview);
   $('#markers').addEventListener('change', loadPreview);
   $('#demo-save').addEventListener('click', () => saveEffect(current.id));
@@ -167,8 +215,9 @@
     } else if (open) openDemo(open.dataset.open, open);
   });
   document.querySelectorAll('[data-filter]').forEach(button => button.addEventListener('click', () => setFilter(button.dataset.filter)));
+  document.querySelectorAll('.stage-option').forEach(button => button.addEventListener('click', () => setStage(button.dataset.stage)));
   $('#search').addEventListener('input', event => { query = event.target.value; renderCards(); });
-  $('#reset-filter').addEventListener('click', () => { query = ''; $('#search').value = ''; setFilter('all'); });
+  $('#reset-filter').addEventListener('click', () => { query = ''; $('#search').value = ''; filter = 'all'; setStage('all'); setFilter('all'); });
   document.querySelectorAll('[data-tab]').forEach(button => {
     button.addEventListener('click', () => renderCode(button.dataset.tab));
     button.addEventListener('keydown', event => {
@@ -232,7 +281,7 @@
       title: `Scroll Lab ${current.number} — ${current.title}`,
       description: `${current.description}\n${current.experiment}`,
       html: current.html, css: current.css, js: current.js,
-      js_external: libraries.join(';'),
+      js_external: current.libraries.join(';'),
       editors: '111', layout: 'left', tags: ['gsap', 'scrolltrigger', 'scroll-animation']
     });
     form.append(input);
